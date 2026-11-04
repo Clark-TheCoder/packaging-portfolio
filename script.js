@@ -431,24 +431,24 @@ function closeLightbox() {
   document.body.classList.remove("lightbox-open");
 }
 
-// Close the lightbox with the button
-
+// Close the lightbox with the X button
 if (lightboxClose) {
-  lightboxClose.addEventListener("click", closeLightbox);
+  lightboxClose.addEventListener("click", (event) => {
+    event.stopPropagation();
+    closeLightbox();
+  });
 }
 
-// Close the lightbox by clicking outside the content
-
+// Close the lightbox by clicking ANYWHERE inside it
 if (lightbox) {
-  lightbox.addEventListener("click", (event) => {
-    if (event.target === lightbox) {
+  lightbox.addEventListener("click", () => {
+    if (lightbox.classList.contains("active")) {
       closeLightbox();
     }
   });
 }
 
 // Close the lightbox with Escape
-
 document.addEventListener("keydown", (event) => {
   if (
     event.key === "Escape" &&
@@ -486,3 +486,26 @@ projects.forEach((project) => {
     }
   });
 });
+
+// Contact form email
+
+const contactForm = document.getElementById("contact-form");
+
+if (contactForm) {
+  contactForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const senderEmail = document.getElementById("email").value;
+    const message = document.getElementById("message").value;
+
+    const recipient = "emmabossuytclark@gmail.com";
+
+    const subject = encodeURIComponent("Portfolio Website Inquiry");
+
+    const body = encodeURIComponent(
+      `From: ${senderEmail}\n\nMessage:\n${message}`,
+    );
+
+    window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+  });
+}
